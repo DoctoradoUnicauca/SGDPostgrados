@@ -45,21 +45,6 @@ public class DocumentacionFacade extends AbstractFacade<Documentacion> {
         List<Documentacion> documentos = query.getResultList();
         return documentos;
     }
-//
-//    public int getIdArchivo() {
-//        try {
-//            String queryStr;
-//            queryStr = "SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'doctorado_2' AND TABLE_NAME = 'archivo'";
-//            javax.persistence.Query query = getEntityManager().createNativeQuery(queryStr);
-//            List results = query.getResultList();
-//            int autoIncrement = ((Integer) results.get(0));
-//            return autoIncrement;
-//        } catch (Exception e) {
-//            System.out.println("Error " + e.getMessage());
-//            System.out.println(e);
-//            return -1;
-//        }
-//    }
 
     public int getnumFilasPubRev() {
         try {
@@ -101,4 +86,123 @@ public class DocumentacionFacade extends AbstractFacade<Documentacion> {
         return numeroPub;
 
     }
+    
+     /**
+     * Funcion que me retorna la lista de publicaciones que ha registrado un 
+     * estudiante en un determinado año. El listado esta ordenado por tipo de 
+     * publicacion de forma descendente
+     * @param estudianteId
+     * @param anio
+     * @return Lista publicaciones
+     */
+    public List<Documentacion> publicacionesEstudiantePorAnio(int estudianteId,int anio){
+        javax.persistence.Query query = getEntityManager().createNamedQuery("Documentacion.StudentPublications_Year");
+        query.setParameter("identificador", estudianteId);
+        query.setParameter("anio", anio);
+        try {
+            System.out.println("Buscando publicaciones de estudiante por año");
+            return query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Error " + e.getMessage());
+            System.out.println(e);
+            return null;
+        }
+    }
+    
+    
+    /**
+     * Funcion que me retorna la lista de publicaciones que ha registrado un
+     * estudiante en un determinado semestre. El listado esta ordenado por tipo de 
+     * publicacion de forma descendente
+     * @param estudianteId
+     * @param anio
+     * @param semestre
+     * @return Lista publicaciones
+     */
+    public List<Documentacion> publicacionesEstudiantePorSemestre(int estudianteId, int anio, int semestre){
+        javax.persistence.Query query = getEntityManager().createNamedQuery("Documentacion.StudentPublications_Semester");
+        query.setParameter("identificador", estudianteId);
+        query.setParameter("anio", anio);
+        if(semestre == 1){
+            query.setParameter("inicio",1);
+            query.setParameter("fin",6);
+        }else{
+            query.setParameter("inicio",7);
+            query.setParameter("fin",12);
+        }
+        try {
+            System.out.println("Buscando publicaciones de estudiante por semestre");
+            return query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Error " + e.getMessage());
+            System.out.println(e);
+            return null;
+        }
+    }
+    
+    
+    public List<Documentacion> listadoDocumentacionEst(Integer estudianteId) {
+        javax.persistence.Query query = getEntityManager().createNamedQuery("Documentacion.findByIdEstudiante");
+        query.setParameter("estId", estudianteId);
+        try {
+            System.out.println("Buscando publicaciones por estudiante");
+            return query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Error " + e.getMessage());
+            System.out.println(e);
+            return null;
+        }
+    }
+    
+    
+    /**
+     * Funcion para buscar todas las publicaciones que han sido registradas 
+     * en un determinado año. El listado esta ordenado por tipo de publicacion
+     * de forma descendente
+     * @param anio
+     * @return Lista de publicaciones
+     */
+    public List<Documentacion> publicacionesPorAnio(int anio){
+        javax.persistence.Query query = getEntityManager().createNamedQuery("Documentacion.findAllByAnioFechaRegistro");
+        query.setParameter("anio", anio);
+        List<Documentacion> lista = null;
+        try {
+            System.out.println("Buscando publicaciones en el año "+anio);
+            lista = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Error " + e.getMessage());
+            System.out.println(e);
+        }
+        return lista;
+    }
+    
+    /**
+     * Funcion para buscar todas las publicaciones que han registradas 
+     * en un determinado semestre. El listado esta ordenado por tipo de 
+     * publicacion de forma descendente
+     * @param anio
+     * @param semestre
+     * @return Lista de publicaciones
+     */
+    public List<Documentacion> publicacionesPorSemestre(int anio, int semestre){
+        javax.persistence.Query query = getEntityManager().createNamedQuery("Documentacion.findAllBySemestre");
+        query.setParameter("anio", anio);
+        if(semestre == 1){
+            query.setParameter("inicio",1);
+            query.setParameter("fin",6);
+        }else{
+            query.setParameter("inicio",7);
+            query.setParameter("fin",12);
+        }
+        List<Documentacion> lista = null;
+        try {
+            System.out.println("Buscando publicaciones en el semestre "+anio+"-"+semestre);
+            lista = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Error " + e.getMessage());
+            System.out.println(e);
+        }
+        return lista;
+    }
+    
 }

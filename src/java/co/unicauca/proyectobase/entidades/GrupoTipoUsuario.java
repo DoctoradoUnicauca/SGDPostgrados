@@ -16,7 +16,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,12 +25,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author debian
  */
 @Entity
-@Table(name = "grupo_tipo_usuario", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"correo"})})
+@Table(name = "grupo_tipo_usuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GrupoTipoUsuario.findAll", query = "SELECT g FROM GrupoTipoUsuario g")
-    , @NamedQuery(name = "GrupoTipoUsuario.findByCorreo", query = "SELECT g FROM GrupoTipoUsuario g WHERE g.correo = :correo")
+    , @NamedQuery(name = "GrupoTipoUsuario.findByNombreUsuario", query = "SELECT g FROM GrupoTipoUsuario g WHERE g.nombreUsuario = :nombreUsuario")
     , @NamedQuery(name = "GrupoTipoUsuario.findByUsuId", query = "SELECT g FROM GrupoTipoUsuario g WHERE g.usuId = :usuId")})
 public class GrupoTipoUsuario implements Serializable {
 
@@ -39,16 +37,16 @@ public class GrupoTipoUsuario implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "correo", nullable = false, length = 45)
-    private String correo;
+    @Column(name = "nombre_usuario", nullable = false, length = 45)
+    private String nombreUsuario;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "usu_id", nullable = false)
     private Integer usuId;
-    @JoinColumn(name = "tipo", referencedColumnName = "tipo", nullable = false)
+    @JoinColumn(name = "id_tipo", referencedColumnName = "id_tipo", nullable = false)
     @ManyToOne(optional = false)
-    private TipoUsuario tipo;
+    private TipoUsuario idTipo;
     @JoinColumn(name = "usu_id", referencedColumnName = "usu_id", nullable = false, insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Usuario usuario;
@@ -60,17 +58,17 @@ public class GrupoTipoUsuario implements Serializable {
         this.usuId = usuId;
     }
 
-    public GrupoTipoUsuario(Integer usuId, String correo) {
+    public GrupoTipoUsuario(Integer usuId, String nombreUsuario) {
         this.usuId = usuId;
-        this.correo = correo;
+        this.nombreUsuario = nombreUsuario;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 
     public Integer getUsuId() {
@@ -81,12 +79,12 @@ public class GrupoTipoUsuario implements Serializable {
         this.usuId = usuId;
     }
 
-    public TipoUsuario getTipo() {
-        return tipo;
+    public TipoUsuario getIdTipo() {
+        return idTipo;
     }
 
-    public void setTipo(TipoUsuario tipo) {
-        this.tipo = tipo;
+    public void setIdTipo(TipoUsuario idTipo) {
+        this.idTipo = idTipo;
     }
 
     public Usuario getUsuario() {
@@ -119,7 +117,7 @@ public class GrupoTipoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.GrupoTipoUsuario[ usuId=" + usuId + " ]";
+        return "co.unicauca.proyectobase.entidades.GrupoTipoUsuario[ usuId=" + usuId + " ]";
     }
     
 }

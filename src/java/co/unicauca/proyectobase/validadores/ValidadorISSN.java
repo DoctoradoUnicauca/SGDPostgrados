@@ -24,19 +24,8 @@ public class ValidadorISSN implements Validator {
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         String issn = value.toString();
-
-        if(issn.length() == 0) 
-        {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Se debe registrar el ISSN de la revista");
-            throw new ValidatorException(msg);
-        }
         
         if (issn.length() != 0) {
-
-            if (issn.length() != 8) {
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Longitud del ISSN es incorrecta, debe ser de 8 numeros o 7 numeros y una X ");
-                throw new ValidatorException(msg);
-            }
 
             if (!validarFormato(issn)) {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Formato del ISSN es incorrecto, debe ser de 8 numeros o 7 numeros y una X ");
@@ -52,7 +41,6 @@ public class ValidadorISSN implements Validator {
         Pattern p = Pattern.compile("(^([0-9]{4})+([0-9]{3})+([0-9X]{1}))$");
         //http://www.issn.org/es/comprender-el-issn/que-es-el-numero-issn/
         //https://goo.gl/jQFjlJ
-        //Pattern p = Pattern.compile("^([0-9])");
         Matcher m = p.matcher(doi);
         return m.find();
     }

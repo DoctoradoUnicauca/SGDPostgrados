@@ -6,52 +6,103 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      >
-
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
-        <title>Gráfica Publicaciones Registradas</title>
+        <title>Reportes</title>
     </h:head>
-    <ui:composition template="./../../../plantillas/PlantGrafica.xhtml">
+    <ui:composition template="./../../../plantillas/Coordinador.xhtml">
         <ui:define name="content"> 
             <div class="ui-messages-info ">
                 <span class="ui-messages-info-detail">
-                    <b>Gráfica de Publicaciones Registradas</b>
+                    <b>Reportes</b>
                 </span>
             </div>
             <p:panel>      
 
-                <h:panelGrid columns="2" cellspacing="10"  styleClass="elementosCentrados bajarGrid"  >
+                <h:form id="generarReporte" target="_blank">
+                    <h:panelGrid columns="4" cellspacing="10">
 
+                        <p:outputLabel value="Tipo de reporte" style="font-weight:bold;" />
+                        <p:selectOneMenu id="valTipoReporte" value="#{reportesController.tipoReporte}" 
+                                         required="true" requiredMessage="Debe seleccionar un campo de la lista">
+                            <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                            <f:selectItem itemLabel="Global" itemValue="global" />
+                            <f:selectItem itemLabel="Por estudiante" itemValue="porEstudiante" />
+                            <f:validator validatorId="ValidadorListaVacia" />
+                            <f:ajax render="@form msjvalTipoReporte valTipoTiempo" event="change" listener="#{reportesController.limpiarTiempo}" />
+                        </p:selectOneMenu>
+                        
+                        <p:inputText id="codigoEstudianteF" value="#{reportesController.codigoEstudiante}" placeholder="Ingrese el codigo aqui" rendered="#{reportesController.tipoReporte == 'porEstudiante'}"/>                        
+                        <h:outputText rendered="#{reportesController.tipoReporte != 'porEstudiante'}" value=""/>
+                        <h:outputText value=""/>
+                                                                       
+                        <p:outputLabel value="Rango de tiempo" style="font-weight:bold;" />
+                        <p:selectOneMenu id="valTipoTiempo" value="#{reportesController.tipoTiempo}" styleClass="tipopublicacion addEspacio form-control" 
+                                         required="true" requiredMessage="Debe seleccionar un campo de la lista">
+                            <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                            <f:selectItem itemLabel="Por semestre" itemValue="semestre"/>
+                            <f:selectItem itemLabel="Por año" itemValue="año"/>                            
+                            <f:selectItem itemLabel="Inicio estudios" itemValue="inicioEstudios" itemDisabled="#{reportesController.tipoReporte != 'porEstudiante'}"/>
+                            <f:validator validatorId="ValidadorListaVacia" />                               
+                             <f:ajax render="@form msjvalTipoReporte" />                                     
+                        </p:selectOneMenu>
+                        
+                        
+                        <p:inputText id="anoConSemestreFuera" value="#{reportesController.anios}" placeholder="Ingrese el año aquí" disabled="#{reportesController.tipoTiempo == ''}"/>                        
+                        <h:outputText value="" rendered="#{reportesController.tipoTiempo == 'año' || reportesController.tipoTiempo == 'inicioEstudios'}"/>
+                        <h:outputText value="" rendered="#{reportesController.tipoTiempo == ''}"/>                                                
+                        <p:inputText id="semestreIngresadoFuera" value="#{reportesController.semestre}" placeholder="Ingrese el semestre aqui" rendered="#{reportesController.tipoTiempo == 'semestre'}" />
+                        
+                                                                    
+                        <p:commandButton  action="#{reportesController.generarReporte()}" value="Generar Reporte"/>
+                    <a  target="_blank"  style="font-weight:bold;" href="../../resources/pdf/reporte.pdf"  >Descargar PDF </a>
+                    <h:outputText value=""/>
+                        
+                        
+                        <!--<p:inputText id="anioConSemestreFuera" value="#{reportesController.anios}" placeholder="Ingrese el año aquí"/>
+                        <p:inputText id="semestreIngresadoFuera" value="#{reportesController.semestre}" placeholder="Ingrese el semestre aqui"/>
+                        <p:inputText id="codigoEstudianteF" value="#{reportesController.codigoEstudiante}" placeholder="Ingrese el codigo aqui"/>-->
+                        
+                        
+                        <!--<p:inputText id="codigoEstudiante" value="#{reportesController.codigoEstudiante}" placeholder="Ingrese el codigo" rendered="#{reportesController.tipoReporte == 'porEstudiante'}"/>    -->                                        
+                        <!--<p:inputText id="semestreIngresado" value="#{reportesController.semestre}" placeholder="Ingrese el semestre" rendered="#{reportesController.tipoTiempo == 'semestre'}"/>-->
+                    </h:panelGrid> 
+                    
+                    
+                        
+                </h:form>
+                <br/>
+                <p:separator/>
+                
                     <h:form>
-                        <h:outputText value="Año: "></h:outputText>
+                    <h:panelGrid columns="3" cellspacing="10">
+                        <h:outputText value="Año: " style="font-weight: bold;"/>
                         <p:inputText id="txtAnio" value = "#{graficaPubRegController.anio}" maxlength="4" size="6">
                             <f:validator validatorId="validadorAnio"/>
-                            <p:ajax event="keyup" update="msjValAnio btnAceptar" />  
+                            <p:ajax event="blur" update="msjValAnio btnAceptar" />  
                         </p:inputText>   
-                        <p:commandButton id="btnAceptar"  value="Buscar"  action="#{graficaPubRegController.iniciar()}" class="btn btn-success"  style="margin-left:10px; float:center;" />                             
+                        <p:commandButton id="btnAceptar"  value="Consultar"  action="#{graficaPubRegController.iniciar()}" class="btn btn-success"  style="margin-left:10px; float:center;" />                                                     
+                    </h:panelGrid>  
                         <p:message for="txtAnio" id="msjValAnio" styleClass="addEspacio"/> 
-
                     </h:form>
 
-                </h:panelGrid>  
-                <br/>
                 <h:body>
                     <p:chart type="bar" model="#{graficaPubRegController.barModel}" style="width:900px; float:center;" />
-
                 </h:body>
 
                 <h:panelGrid columns="2" cellspacing="10"  styleClass="elementosCentrados bajarGrid"  >
-
-                    <p:outputLabel value="Total Publicaciones: &nbsp;&nbsp;&nbsp;" for="valNombAut" styleClass="addEspacio"/>
-                    <h:outputText class="form-control" id="valNombAut"  value="#{graficaPubRegController.totalPub}" styleClass="addEspacio form-control"/>
+                    <p:outputLabel value="Total Publicaciones:"  style="font-weight: bold"/>
+                    <h:outputText class="form-control" id="valNombAut"  value="#{graficaPubRegController.totalPub}" style="color: #0044cc; font-weight: bold; font-family: sans-serif"/>
                 </h:panelGrid>
+                
             </p:panel>
-            
+            <br/>
             <h:form>
                 <p:commandButton  style="font-size: 13px; float:center;" value="Volver" action="#{vistasCoordinadorController.getVistasCoordinador()}" class="btn btn-primary"/>                       
             </h:form>
+            <br/><br/>
+            
             
         </ui:define>
     </ui:composition>

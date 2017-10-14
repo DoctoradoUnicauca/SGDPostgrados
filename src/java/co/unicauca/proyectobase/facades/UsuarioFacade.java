@@ -38,7 +38,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         if (findUsuario != null && !findUsuario.isEmpty()) {
             return findUsuario.get(0);
         }
-        System.out.println("==================================null");
+        return null;
+    }
+    public Usuario buscarPorNombreUsuario(String nombreUsuario) {
+        Query query = em.createNamedQuery("Usuario.findByNombreUsuario");
+        query.setParameter("nombreUsuario", nombreUsuario);
+        List<Usuario> findUsuario = query.getResultList();
+        if (findUsuario != null && !findUsuario.isEmpty()) {
+            return findUsuario.get(0);
+        }
         return null;
     }
 

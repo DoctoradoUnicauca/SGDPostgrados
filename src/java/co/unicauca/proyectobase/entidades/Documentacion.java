@@ -50,6 +50,11 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Documentacion.findByDocNumActa", query = "SELECT d FROM Documentacion d WHERE d.docNumActa = :docNumActa")
     , @NamedQuery(name = "Documentacion.findByDocVisado", query = "SELECT d FROM Documentacion d WHERE d.docVisado = :docVisado")
     , @NamedQuery(name = "Documentacion.findByDocAutoresSecundarios", query = "SELECT d FROM Documentacion d WHERE d.docAutoresSecundarios = :docAutoresSecundarios")
+    , @NamedQuery(name = "Documentacion.StudentPublications_Year", query = "SELECT d FROM Documentacion d WHERE d.estId.estId = :identificador AND FUNC('YEAR',d.docFechaRegistro) = :anio ORDER BY  d.idTipoDocumentacion.nombre DESC")
+    , @NamedQuery(name = "Documentacion.StudentPublications_Semester", query = "SELECT d FROM Documentacion d WHERE d.estId.estId = :identificador AND FUNC('YEAR',d.docFechaRegistro) = :anio AND FUNC('MONTH',d.docFechaRegistro) Between :inicio AND :fin ORDER BY  d.idTipoDocumentacion.nombre DESC")
+    , @NamedQuery(name = "Documentacion.findAllByAnioFechaRegistro", query = "SELECT d FROM Documentacion d WHERE  FUNC('YEAR',d.docFechaRegistro) = :anio ORDER BY  d.idTipoDocumentacion.nombre DESC")
+    , @NamedQuery(name = "Documentacion.findAllBySemestre", query = "SELECT d FROM Documentacion d WHERE  FUNC('YEAR',d.docFechaRegistro) = :anio AND FUNC('MONTH',d.docFechaRegistro) Between :inicio AND :fin ORDER BY  d.idTipoDocumentacion.nombre DESC")
+
 })
 public class Documentacion implements Serializable {
 

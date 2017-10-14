@@ -299,14 +299,6 @@ footer p a:visited
     width: 251px;
 }
 #bandera {
-/*    position: fixed;
-    z-index: -1;
-    background: url(../images/bandera.png) no-repeat;
-    height: 412px;
-    right: 10%;
-    bottom: -179px;
-    width: 1284px;*/
-
     background: url(../images/bandera.png) no-repeat;
     width: 345px;
     height: 130px;

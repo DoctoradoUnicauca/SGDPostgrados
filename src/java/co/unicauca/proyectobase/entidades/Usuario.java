@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
     , @NamedQuery(name = "Usuario.findByNombres", query = "SELECT u FROM Usuario u WHERE u.nombres = :nombres")
+    , @NamedQuery(name = "Usuario.findByNombreUsuario", query = "SELECT u FROM Usuario u WHERE u.nombreUsuario = :nombreUsuario")
     , @NamedQuery(name = "Usuario.findByApellidos", query = "SELECT u FROM Usuario u WHERE u.apellidos = :apellidos")
     , @NamedQuery(name = "Usuario.findByCorreo", query = "SELECT u FROM Usuario u WHERE u.correo = :correo")
     , @NamedQuery(name = "Usuario.buscarPorCorreoExceptoConId", query = "SELECT u FROM Usuario u WHERE u.correo = :correo  and u.usuId != :usuId ")
@@ -45,6 +46,12 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "nombre_usuario", nullable = false, length = 45)
+    private String nombreUsuario;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -196,4 +203,11 @@ public class Usuario implements Serializable {
         return "entidades.Usuario[ usuId=" + usuId + " ]";
     }
 
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
 }

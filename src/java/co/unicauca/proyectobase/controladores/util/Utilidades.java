@@ -29,6 +29,9 @@ public class Utilidades {
             TIPO_PDF_CARTA_DE_APROBACION = "carta_de_aprobacion";
     public static final String ESTADO_INACTIVO = "INACTIVO",
             ESTADO_ACTIVO = "ACTIVO";
+    public static final String ESTADO_VISADO_EN_ESPERA = "EN ESPERA",
+            ESTADO_VISADO_APROBADO = "APROBADO",
+            ESTADO_VISADO_NO_APROBADO = "NO APROBADO";
 
     public static void enviarCorreoCreacion(String correo, String usuario, String contrasena) {
         Utilidades.enviarCorreo(correo,

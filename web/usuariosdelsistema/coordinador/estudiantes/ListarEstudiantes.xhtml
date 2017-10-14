@@ -5,11 +5,11 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-    <head>
+    
+    <h:head>
         <title>Listar estudiante</title>
-    </head>
-    <body>
+    </h:head>
+    <h:body>
 
         <!-- IMPLEMENTATION -->
         <ui:composition template="/plantillas/Coordinador.xhtml">
@@ -19,8 +19,6 @@
                         <b>Listado General de Estudiantes</b>
                     </span>
                 </div>
-
-                <p:separator/>
 
                 <h:form>
                     <p:growl autoUpdate="true" showDetail="true"/>
@@ -66,7 +64,7 @@
                 </h:form>
             </ui:define>
         </ui:composition>
-    </body>
+    </h:body>
 </html>
 
 

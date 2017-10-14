@@ -282,7 +282,7 @@ public class utilDocumentacion {
         }
     }
 
-    public String obtenerNombreDoc(Documentacion doc) {
+    public static String obtenerNombreDoc(Documentacion doc) {
         String nombrePub = "";
         String tipoPublicacion = doc.getIdTipoDocumentacion().getNombre();
 

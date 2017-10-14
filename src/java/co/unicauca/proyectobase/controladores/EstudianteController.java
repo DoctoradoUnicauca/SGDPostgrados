@@ -98,8 +98,8 @@ public class EstudianteController implements Serializable {
         // asignar tipo a usuario
         GrupoTipoUsuario gtu = new GrupoTipoUsuario();
         gtu.setUsuId(usu.getUsuId());
-        gtu.setCorreo(usu.getCorreo());
-        gtu.setTipo(new TipoUsuario(Utilidades.TIPO_USUARIO_ESTUDIANTE));
+        gtu.setNombreUsuario(usu.getCorreo().split("@")[0]);
+        gtu.setIdTipo(new TipoUsuario(Utilidades.TIPO_USUARIO_ESTUDIANTE));
         // almacenar tipo en base de datos
         ejbGrupoTipoUsuarioFacade.edit(gtu);
         Utilidades.enviarCorreoCreacion(usu.getCorreo(), usu.getNombres(), selected.getEstCodigo());
@@ -108,8 +108,8 @@ public class EstudianteController implements Serializable {
 
     public String update() {
         ejbUsuarioFacade.edit(selected.getUsuId());
-        selected.getUsuId().getGrupoTipoUsuario().setCorreo(selected.getUsuId().getCorreo());
-        System.out.println("tipo:-- " + selected.getUsuId().getGrupoTipoUsuario().getTipo());
+        selected.getUsuId().getGrupoTipoUsuario().setNombreUsuario(selected.getUsuId().getCorreo().split("@")[0]);
+        System.out.println("tipo:-- " + selected.getUsuId().getGrupoTipoUsuario().getIdTipo());
         ejbGrupoTipoUsuarioFacade.edit(selected.getUsuId().getGrupoTipoUsuario());
 
         Utilidades.enviarCorreoEdicion(selected);

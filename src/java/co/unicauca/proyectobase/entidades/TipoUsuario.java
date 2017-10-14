@@ -6,7 +6,7 @@
 package co.unicauca.proyectobase.entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "TipoUsuario.findAll", query = "SELECT t FROM TipoUsuario t")
     , @NamedQuery(name = "TipoUsuario.findByDescripcion", query = "SELECT t FROM TipoUsuario t WHERE t.descripcion = :descripcion")
-    , @NamedQuery(name = "TipoUsuario.findByTipo", query = "SELECT t FROM TipoUsuario t WHERE t.tipo = :tipo")})
+    , @NamedQuery(name = "TipoUsuario.findByIdTipo", query = "SELECT t FROM TipoUsuario t WHERE t.idTipo = :idTipo")})
 public class TipoUsuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,20 +44,20 @@ public class TipoUsuario implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
-    @Column(name = "tipo", nullable = false, length = 30)
-    private String tipo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipo")
-    private List<GrupoTipoUsuario> grupoTipoUsuarioList;
+    @Column(name = "id_tipo", nullable = false, length = 30)
+    private String idTipo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipo")
+    private Collection<GrupoTipoUsuario> grupoTipoUsuarioCollection;
 
     public TipoUsuario() {
     }
 
-    public TipoUsuario(String tipo) {
-        this.tipo = tipo;
+    public TipoUsuario(String idTipo) {
+        this.idTipo = idTipo;
     }
 
-    public TipoUsuario(String tipo, String descripcion) {
-        this.tipo = tipo;
+    public TipoUsuario(String idTipo, String descripcion) {
+        this.idTipo = idTipo;
         this.descripcion = descripcion;
     }
 
@@ -69,27 +69,27 @@ public class TipoUsuario implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getIdTipo() {
+        return idTipo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setIdTipo(String idTipo) {
+        this.idTipo = idTipo;
     }
 
     @XmlTransient
-    public List<GrupoTipoUsuario> getGrupoTipoUsuarioList() {
-        return grupoTipoUsuarioList;
+    public Collection<GrupoTipoUsuario> getGrupoTipoUsuarioCollection() {
+        return grupoTipoUsuarioCollection;
     }
 
-    public void setGrupoTipoUsuarioList(List<GrupoTipoUsuario> grupoTipoUsuarioList) {
-        this.grupoTipoUsuarioList = grupoTipoUsuarioList;
+    public void setGrupoTipoUsuarioCollection(Collection<GrupoTipoUsuario> grupoTipoUsuarioCollection) {
+        this.grupoTipoUsuarioCollection = grupoTipoUsuarioCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (tipo != null ? tipo.hashCode() : 0);
+        hash += (idTipo != null ? idTipo.hashCode() : 0);
         return hash;
     }
 
@@ -100,7 +100,7 @@ public class TipoUsuario implements Serializable {
             return false;
         }
         TipoUsuario other = (TipoUsuario) object;
-        if ((this.tipo == null && other.tipo != null) || (this.tipo != null && !this.tipo.equals(other.tipo))) {
+        if ((this.idTipo == null && other.idTipo != null) || (this.idTipo != null && !this.idTipo.equals(other.idTipo))) {
             return false;
         }
         return true;
@@ -108,7 +108,7 @@ public class TipoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.TipoUsuario[ tipo=" + tipo + " ]";
+        return "co.unicauca.proyectobase.entidades.TipoUsuario[ idTipo=" + idTipo + " ]";
     }
     
 }

@@ -2,14 +2,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    
+
     <h:head>
         <title>Ver estudiante</title>
     </h:head>
-    
+
     <ui:composition template="./../../../plantillas/Coordinador.xhtml">
         <ui:define name="content"> 
             <div class="ui-messages-info ">
@@ -17,14 +16,12 @@
                     <b>Información Estudiante</b>
                 </span>
             </div>
-            
-            <p:separator/>
-            
+
             <h:form id="form_registrar">
                 <p:tab  title="Datos personales" titleStyleClass="title">             
                     <p:panel header="Datos personales">
                         <div style = "float: left;"></div>
-                                  
+
                         <h:panelGrid columns="2" cellpadding="5" styleClass="elementosCentrados bajarGrid" id="panelRegistrar">
 
                             <p:outputLabel value="Nombres:" for="valNombre" style="font-weight:bold;"/>
@@ -57,11 +54,14 @@
 
                         </h:panelGrid>
                     </p:panel>
+
+                    <br/>
+                    <h:form>
+                        <p:commandButton value="Atrás" action="#{vistasCoordinadorController.listarEstudiantes()}" class="btn btn-primary" />                       
+                    </h:form>
+                    <br/>
+                    <br/>
                 </p:tab>
-                
-                <h:form>
-                    <p:commandButton value="Atrás" action="#{vistasCoordinadorController.listarEstudiantes()}" class="btn btn-primary" />                       
-                </h:form>
             </h:form>
         </ui:define>
     </ui:composition>

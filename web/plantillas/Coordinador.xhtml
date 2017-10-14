@@ -3,60 +3,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
+        <link rel="shortcut icon" href="#{resource['images/logo_doctorado.ico']}" />
+        <title>DCE</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="css/default.css"/>
         <h:outputStylesheet name="css/cssLayout.css"/>
 
-        <title>Doctorado en Ciencias de la Electrónica</title>
         <h:outputScript library="js" name="jquery.flexibleArea.js"></h:outputScript>
     </h:head>
 
     <h:body> 
-            
         <header class="interno">
             <div id="logoU"></div>
             <div id="banderaHeader"></div>
         </header>
+
         <h:form>
-
-        <p:menubar style="margin-left: 20px; margin-right: 20px; margin-top: 7px; margin-bottom: 10px;">   
-            <f:facet name="options">
-                <p:commandButton value="Cerrar Sesión" icon="ui-icon-extlink" action="#{loginController.salir()}" style="font-size: 15px;"/>
-            </f:facet>        
-        </p:menubar>
-
+            <p:menubar style="margin-left: 20px; margin-right: 20px; margin-top: 7px; margin-bottom: 10px;">   
+                <f:facet name="options">
+                    <p:commandButton value="Cerrar Sesión" icon="ui-icon-extlink" action="#{loginController.salir()}" style="font-size: 15px;"/>
+                </f:facet>        
+            </p:menubar>
         </h:form>
         <div>
-            <div>
-
-                <div id="menu_coordinador" style="float:left; margin-left: 20px; ">
-                    <div class="ui-messages-info ">
-                        <span class="ui-messages-info-detail" style="float: center;"><b>Menú Coordinador</b></span>
-                    </div>
-                    <ui:insert name="left" >
-                        <ui:include src="../coordinador/menu.xhtml"></ui:include>
-                    </ui:insert>
+            <div id="menu_coordinador" style="float:left; margin-left: 20px; ">
+                <div class="ui-messages-info ">
+                    <span class="ui-messages-info-detail" style="float: center;"><b>Menú Coordinador</b></span>
                 </div>
+                <ui:insert name="left" >
+                    <ui:include src="../coordinador/menu.xhtml"></ui:include>
+                </ui:insert>
+            </div>
 
-                <div>
-                    <div id="contenido_coordinador" style=" width: 80%; float:left ; margin-left: 10px;">
-                        <ui:insert name="content">Content</ui:insert>
-                    </div>
-                </div>
+            <div id="contenido_coordinador" style=" width: 82%; float:left ; margin-left: 17px;">
+                <ui:insert name="content">Content</ui:insert>
             </div>
         </div>
-
-
     </h:body>
-    <!--    <footer class="modal-footer">
-            <div id="banderaFooter"></div>
-            <p>2017  |  Posgrados facultad de Ingeniería Electrónica y Telecomunicaciones <br />
-                <a href="http://www.unicauca.edu.co">Universidad del Cauca</a>  |  <a style="color: white;" href="mailto:simca@unicauca.edu.co"><span class="glyphicon glyphicon-envelope"></span>&nbsp;@unicauca.edu.co</a>
-            </p>
-        </footer>-->
 </html>

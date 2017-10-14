@@ -153,7 +153,7 @@ public class TipoUsuarioController implements Serializable {
             }
             if (object instanceof TipoUsuario) {
                 TipoUsuario o = (TipoUsuario) object;
-                return getStringKey(o.getTipo());
+                return getStringKey(o.getIdTipo());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), TipoUsuario.class.getName()});
                 return null;

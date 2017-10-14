@@ -38,7 +38,7 @@ public class sesionController implements Serializable {
     private String password;
     private boolean logeado;
 //    @EJB
-    Usuario usuario;
+    protected Usuario usuario;
 
     @Inject
     private UsuarioFacade ejbFacade;
@@ -100,7 +100,7 @@ public class sesionController implements Serializable {
             }
 
             Principal principal = req.getUserPrincipal();
-            usuario = ejbFacade.buscarPorCorreo(principal.getName());
+            usuario = ejbFacade.buscarPorNombreUsuario(principal.getName());
             ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();
             Map<String, Object> sessionMap = external.getSessionMap();
             sessionMap.put("user", usuario);
@@ -110,11 +110,11 @@ public class sesionController implements Serializable {
             context.addMessage(null, msg);
             logeado = true;
             String nombreUsuario = req.getUserPrincipal().getName();
-            usuario = ejbFacade.buscarPorCorreo(nombreUsuario);
+            usuario = ejbFacade.buscarPorNombreUsuario(nombreUsuario);
         }
         GrupoTipoUsuario gtu = usuario.getGrupoTipoUsuario();
         if (gtu != null) {
-            String grupo = usuario.getGrupoTipoUsuario().getTipo().getTipo();
+            String grupo = usuario.getGrupoTipoUsuario().getIdTipo().getIdTipo();
             switch (grupo) {
                 case Utilidades.TIPO_USUARIO_COORDINADOR:
                     ruta = VistasCoordinador.getVistasCoordinador();
