@@ -169,7 +169,7 @@
                                     <p:outputLabel style="font-style: italic; font-size: 16px; text-align: left; color: red;"  value="*" />&nbsp;
                                 </h:panelGroup>
                                 <p:inputMask mask="9999-999*"  class="form-control" id="valISSN"  value="#{documentacionController.selected.congreso.congIssn}" styleClass="addEspacio form-control">
-                                    <!--<f:validator validatorId="validadorISSN" />-->
+                                    <f:validator validatorId="validadorISSN" />
                                     <p:ajax event="blur" update="msjValISSN" />
                                 </p:inputMask>
                                 <p:message for="valISSN" id="msjValISSN" /> 
@@ -189,11 +189,9 @@
                                 <p:message for="valDOICong" id="msjValDOICong" /> 
                                 <h:outputLink style="color: blue;" value="https://goo.gl/AKGq9b">Conozca más sobre el DOI</h:outputLink>
                                 <h:outputLink style="color: blue;" value="https://goo.gl/jPGYcc">Verifique su DOI</h:outputLink>
-
-
                                 <h:panelGroup>
                                     <p:outputLabel value="Título ponencia:" styleClass="addEspacio"/>
-                                    <p:outputLabel style="font-style: italic; font-size: 16px; text-align: left; color: red;"  value="*" />&nbsp;
+                                    <p:outputLabel style="font-style: italic; font-size: 16px; text-align: left; color: red;"  value="*" />
                                 </h:panelGroup>
                                 <p:inputText class="form-control" id="valNPonencia"  value="#{documentacionController.selected.congreso.congTituloPonencia}" styleClass="addEspacio form-control">
                                     <f:validator validatorId="validadorNombrePonencia" />
@@ -206,7 +204,7 @@
 
                                 <h:panelGroup>
                                     <p:outputLabel value="Nombre evento:" styleClass="addEspacio"/>
-                                    <p:outputLabel style="font-style: italic; font-size: 16px; text-align: left; color: red;"  value="*" />&nbsp;
+                                    <p:outputLabel style="font-style: italic; font-size: 16px; text-align: left; color: red;"  value="*" />
                                 </h:panelGroup>
                                 <p:inputText class="form-control" id="valNEvento"  value="#{documentacionController.selected.congreso.congNombreEvento}" styleClass="addEspacio form-control">
                                     <f:validator validatorId="validadorNombreEvento" />
@@ -250,7 +248,7 @@
                                 </h:panelGroup>
                                 <p:inputMask mask="999-99-99999-99-9"  class="form-control" id="valISBNLibro"  value="#{documentacionController.selected.libro.libIsbn}" 
                                              styleClass="addEspacio form-control" placeholder="123-12-12345-12-1">
-                                    <!--<f:validator validatorId="validadorISBN" />--> 
+                                    <f:validator validatorId="validadorISBN" /> 
                                     <p:ajax event="blur" update="msjValISBNLibro" />
                                 </p:inputMask>
                                 <p:message for="valISBNLibro" id="msjValISBNLibro" /> 
