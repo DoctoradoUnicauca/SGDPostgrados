@@ -20,7 +20,7 @@ public class ValidadorISBN implements Validator{
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         String isbn = value.toString();
         
-        if(!isbn.isEmpty()) {
+        if(isbn.isEmpty()) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "El ISBN es obligatorio");
             throw new ValidatorException(msg);
         }

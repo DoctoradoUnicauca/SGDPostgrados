@@ -4,6 +4,7 @@ import co.unicauca.proyectobase.entidades.Estudiante;
 import co.unicauca.proyectobase.entidades.Usuario;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -122,6 +123,17 @@ public class Utilidades {
             System.out.println("Error-Utilidades -- " + ex.getMessage());
         }
         return sb.toString();
+    }
+
+    public static int[] getListaAnios() {
+        Calendar cal = Calendar.getInstance();
+        int anioInicio = 1999;
+        int anioActual = cal.get(Calendar.YEAR);
+        int[] vectorA = new int[anioActual - anioInicio];
+        for (int i = 0; i < vectorA.length; i++) {
+            vectorA[i] = anioActual--;
+        }
+        return vectorA;
     }
 
 }

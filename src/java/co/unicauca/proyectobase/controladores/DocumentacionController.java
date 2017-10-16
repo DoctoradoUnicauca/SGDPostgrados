@@ -4,8 +4,8 @@ import co.unicauca.proyectobase.entidades.Documentacion;
 import co.unicauca.proyectobase.controladores.util.JsfUtil;
 import co.unicauca.proyectobase.controladores.util.JsfUtil.PersistAction;
 import co.unicauca.proyectobase.controladores.util.VistasCoordinador;
-import co.unicauca.proyectobase.controladores.util.utilDocumentacion;
-import co.unicauca.proyectobase.controladores.util.utilDocumentacion.ArchivoPDF;
+import co.unicauca.proyectobase.controladores.util.UtilDocumentacion;
+import co.unicauca.proyectobase.controladores.util.UtilDocumentacion.ArchivoPDF;
 import co.unicauca.proyectobase.entidades.Estudiante;
 import co.unicauca.proyectobase.facades.DocumentacionFacade;
 import co.unicauca.proyectobase.controladores.util.Utilidades;
@@ -41,11 +41,12 @@ import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -63,10 +64,10 @@ public class DocumentacionController implements Serializable {
     private UploadedFile archivoPDF;
     private UploadedFile TablaContenidoPDF;
     private UploadedFile cartaAprobacionPDF;
-    private utilDocumentacion utilDoc;
+    private UtilDocumentacion utilDoc;
 
     public DocumentacionController() {
-        utilDoc = new utilDocumentacion();
+        utilDoc = new UtilDocumentacion();
         autorSecundario = "";
         autoresSecundarios = new ArrayList<>();
 
@@ -75,11 +76,6 @@ public class DocumentacionController implements Serializable {
     private String autorSecundario;
     private List<String> autoresSecundarios;
 
-//    @PostConstruct
-//    public void init() {
-//        autorSecundario = "";
-//        autoresSecundarios = new ArrayList<>();
-//    }
     public String reinit() {
         autorSecundario = "";
         return null;
@@ -146,7 +142,7 @@ public class DocumentacionController implements Serializable {
         selected.setLibro(new Libro(null, "titulo", "123-45-67891-23-4"));
         selected.setCapituloLibro(new CapituloLibro());
         selected.setRevista(new Revista("NOMBRE REVISTA", "TITULO ARTICULO", "A1", "10.1234/1234"));
-        selected.setCongreso(new Congreso(1, "titulo ponencia", "nombre del evento", "evento nacional", "",""));
+        selected.setCongreso(new Congreso(1, "titulo ponencia", "nombre del evento", "evento nacional", "", ""));
         selected.setIdTipoDocumentacion(new TipoDocumento(1, ""));
         autoresSecundarios = new ArrayList();
         selected.setEstId(est);
@@ -280,7 +276,7 @@ public class DocumentacionController implements Serializable {
         return VistasEstudiante.verPublicacion();
     }
 
-    public utilDocumentacion getUtilDoc() {
+    public UtilDocumentacion getUtilDoc() {
         return utilDoc;
     }
 
@@ -294,19 +290,21 @@ public class DocumentacionController implements Serializable {
 
     //--------------------------------- UTILIDADES -------------------------------
     public String obtenerNombreDoc(Documentacion doc) {
-        utilDoc = new utilDocumentacion();
-        return utilDoc.obtenerNombreDoc(doc);
+        utilDoc = new UtilDocumentacion();
+        return UtilDocumentacion.obtenerNombreDoc(doc);
     }
 
     public String buscarPorVisadoEnEspera() {
-        String vasado = utilDoc.VISADO_EN_ESPERA;
+        String vasado = UtilDocumentacion.VISADO_EN_ESPERA;
         items = getFacade().buscarPorVisado(vasado);
         return VistasCoordinador.listarPublicaciones();
     }
 
     public String buscarPorVisadoRevisada() {
-        String vasado = utilDoc.VISADO_REVISADO;
+        String vasado = UtilDocumentacion.VISADO_APROBADO;
         items = getFacade().buscarPorVisado(vasado);
+        vasado = UtilDocumentacion.VISADO_NO_APROBADO;
+        items.addAll(getFacade().buscarPorVisado(vasado));
         return VistasCoordinador.listarPublicaciones();
     }
 
@@ -390,6 +388,49 @@ public class DocumentacionController implements Serializable {
         return false;
     }
 
+    //<editor-fold defaultstate="collapsed" desc="actualizar estado de publicacion">
+        public String[] getTiposVisado(){
+            return UtilDocumentacion.LISTA_TIPO_VISADO;
+        }
+    /**
+     * cambia el estado de visado de una publicacion en la base de datos
+     * @param evt
+     */
+    public void actualizarVisado(AjaxBehaviorEvent evt) {
+        String comentario = "" + ((UIOutput) evt.getSource()).getValue();
+        String visado = selected.getDocVisado();
+        Integer  numCreditos = selected.getEstId().getEstCreditos();
+        if (!visado.equals("")) {
+            selected.getEstId().setEstCreditos(numCreditos+selected.getDocCreditos());
+            selected.setDocFechaVisado(new Date());
+            ejbFacade.edit(selected);
+            String correo = selected.getEstId().getUsuId().getCorreo();
+            String primeraParte = "Apreciado "
+                    + selected.getEstId().getUsuId().getNombres() + " "
+                    + selected.getEstId().getUsuId().getApellidos()
+                    + "\n\nLe informamos que su publicación con nombre "
+                    + UtilDocumentacion.obtenerNombreDoc(selected);
+            String segundaParte = "";
+            if (visado.equalsIgnoreCase(UtilDocumentacion.VISADO_APROBADO)) {
+                segundaParte = " fue aprobada !ENHORABUENA¡.\nNúmero de creditos: " 
+                        + numCreditos;
+                segundaParte += "\n\nObservaciones: " + comentario;
+            }
+            if (visado.equalsIgnoreCase(UtilDocumentacion.VISADO_NO_APROBADO)) {
+                segundaParte = " no fue aprobada, lo sentimos.";
+                segundaParte += "\n\nObservaciones: " + comentario;
+            }
+            if (visado.equalsIgnoreCase(UtilDocumentacion.VISADO_EN_ESPERA)) {
+                segundaParte = " está en espera.";
+                segundaParte += "\n\nObservaciones: " + comentario;
+            }
+            Utilidades.enviarCorreo(correo, "Revisión de publicación", primeraParte + segundaParte);
+            
+        }
+    }
+    //</editor-fold>  
+
+    //<editor-fold defaultstate="collapsed" desc="Descarga documentos openkm">
     public void pdfCartaAprob() throws FileNotFoundException, IOException, IOException, IOException {
         ArchivoPDF archivoPublic = utilDoc.descargaCartaAprobac("cartaAprobacion", selected);
         if (archivoPublic.getNombreArchivo().equals("")) {
@@ -571,6 +612,9 @@ public class DocumentacionController implements Serializable {
         }
     }
 
+    //</editor-fold>  
+    
+    //<editor-fold defaultstate="collapsed" desc="agregar nueva publicacion al estudiante">
     public String agregar(Estudiante est) {
         System.out.println("Registrando publicacion");
         /* formatoValido -> se utiliza para verificar que el usario
@@ -616,11 +660,22 @@ public class DocumentacionController implements Serializable {
                 System.out.println("agregar");
                 try {
                     selected.setEstId(est);
+                    selected.setDocCreditos(2);
                     int idDocument = ejbFacade.getnumFilasPubRev();
                     selected.setDocIdentificador(idDocument);
-
-                    /* Dependiendo de si se adiciona una revista, un congreso,un libro o un  
-               capitulo de un libro se crea el objeto respectivo*/
+                    // optener autores secundarios
+                    String autSecundarios = "";
+                    String separador = UtilDocumentacion.SEPARADOR_AUTORES_SECUNDARIOS;
+                    for (int i = 0; i < autoresSecundarios.size(); i++) {
+                        if (i == autoresSecundarios.size() - 1) {
+                            separador = "";
+                        }
+                        autSecundarios += autoresSecundarios.get(i) + separador;
+                    }
+                    selected.setDocAutoresSecundarios(autSecundarios);
+                    /* Dependiendo de si se adiciona una revista, congreso, libro o   
+                    capitulo de un libro se mantiena el objeto respectivo y se eliminan
+                    los objetos residuales correspondientes a los demas tipos*/
                     if (renderizarRevista()) {
                         System.out.println("revista:" + selected.getIdTipoDocumentacion().getNombre());
 //                        selected.getRevista().setDocumentacion(selected);
@@ -633,7 +688,6 @@ public class DocumentacionController implements Serializable {
                     if (renderizarCongreso()) {
 
                         System.out.println("congreso:" + selected.getIdTipoDocumentacion().getNombre());
-//                        selected.getCongreso().setDocumentacion(selected);
                         selected.getCongreso().setDocIdentificador(idDocument);
                         selected.setRevista(null);
                         selected.setCapituloLibro(null);
@@ -642,8 +696,6 @@ public class DocumentacionController implements Serializable {
 
                     if (renderizarLibro()) {
                         System.out.println("libro:" + selected.getIdTipoDocumentacion().getNombre());
-                        /* SI no es una revista, el objeto a adicionar es un congreso*/
-//                        selected.getLibro().setDocumentacion(selected);
                         selected.getLibro().setDocIdentificador(idDocument);
                         selected.setRevista(null);
                         selected.setCongreso(null);
@@ -652,9 +704,6 @@ public class DocumentacionController implements Serializable {
 
                     if (renderizarCapLibro()) {
                         System.out.println("capitulo libro:" + selected.getIdTipoDocumentacion().getNombre());
-                        /* SI no es una revista, el objeto a adicionar es un congreso*/
-//                        selected.getCapituloLibro().setPubIdentificador(numPubRevis);
-//                        selected.getCapituloLibro().setDocumentacion(selected);
                         selected.getCapituloLibro().setDocIdentificador(idDocument);
                         selected.setRevista(null);
                         selected.setCongreso(null);
@@ -732,150 +781,5 @@ public class DocumentacionController implements Serializable {
         return VistasEstudiante.verPublicaciones();
 
     }
-//    public String agregar(Estudiante est) {
-//        System.out.println("Registrando publicacion");
-//        /* formatoValido -> se utiliza para verificar que el usario
-//           suba unicamente archivos en formato pdf*/
-//        boolean formatoValido = true;
-//        if (!ArchivoPDF.getFileName().equalsIgnoreCase("") && !"application/pdf".equals(ArchivoPDF.getContentType())) {
-//
-//            FacesContext.getCurrentInstance().addMessage("valPublicacion", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe subir la publicación o la evidencia de la publicación en formato PDF", ""));
-//            formatoValido = false;
-//        }
-//        if (!TablaContenidoPDF.getFileName().equalsIgnoreCase("") && !"application/pdf".equals(TablaContenidoPDF.getContentType())) {
-//
-//            FacesContext.getCurrentInstance().addMessage("valTContenido", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe subir la Tabla de Contenido en formato PDF", ""));
-//            formatoValido = false;
-//        }
-//        if (!cartaAprobacionPDF.getFileName().equalsIgnoreCase("") && !"application/pdf".equals(cartaAprobacionPDF.getContentType())) {
-//
-//            FacesContext.getCurrentInstance().addMessage("cartaAprobacion", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe subir la carta de aprobación en formato PDF", ""));
-//            formatoValido = false;
-//        }
-//
-//        if (formatoValido == true) {
-//            /* puedeSubir  ->  se utiliza para comprobar que el usuario ha seleccionado 
-//                el PDF de la publicacion o en su defecto la carta de aprobacion*/
-//            boolean puedeSubir = false;
-//            if (ArchivoPDF.getFileName().equalsIgnoreCase("")) {
-//                if (cartaAprobacionPDF.getFileName().equalsIgnoreCase("")) {
-//
-//                    FacesContext.getCurrentInstance().addMessage("cartaAprobacion", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe subir la publicación o la evidencia de la publicación", ""));
-//                } else {
-//                    puedeSubir = true;
-//
-//                }
-//            } else {
-//                puedeSubir = true;
-//            }
-//
-//            if (puedeSubir == true) {
-//                //else {
-//                System.out.println("agregar");
-//                try {
-//                    List<Estudiante> listEst = new ArrayList();
-//                    listEst.add(est);
-//                    selected.setEstudianteList(listEst);
-//                    String nombreAut = "";
-//                    nombreAut = "" + est.getUsuId().getNombres() + " " + est.getUsuId().getApellidos();
-//
-////                    selected.setPubNombreAutor(nombreAut);
-////                    int numPubRevis = ejbFacade.getnumFilasPubRev();
-////                    selected.setPubIdentificador(numPubRevis);
-//
-//                    /* Dependiendo de si se adiciona una revista, un congreso,un libro o un  
-//               capitulo de un libro se crea el objeto respectivo*/
-//                    if (renderizarRevista()) {
-////                        selected.getRevista().setPubIdentificador(numPubRevis);
-//                        selected.getRevista().setDocumentacion(selected);
-//                        selected.setCongreso(null);
-//                        selected.setCapituloLibro(null);
-//                        selected.setLibro(null);
-//
-//                    }
-//                    if (renderizarCongreso()) {
-//
-////                        selected.getCongreso().setPubIdentificador(numPubRevis);
-//                        selected.getCongreso().setDocumentacion(selected);
-//                        selected.setRevista(null);
-//                        selected.setCapituloLibro(null);
-//                        selected.setLibro(null);
-//                    }
-//
-//                    if (renderizarLibro()) {
-//                        /* SI no es una revista, el objeto a adicionar es un congreso*/
-////                        selected.getLibro().setPubIdentificador(numPubRevis);
-//                        selected.getLibro().setDocumentacion(selected);
-//                        selected.setRevista(null);
-//                        selected.setCongreso(null);
-//                        selected.setCapituloLibro(null);
-//                    }
-//
-//                    if (renderizarCapLibro()) {
-//                        /* SI no es una revista, el objeto a adicionar es un congreso*/
-////                        selected.getCapituloLibro().setPubIdentificador(numPubRevis);
-//                        selected.getCapituloLibro().setDocumentacion(selected);
-//                        selected.setRevista(null);
-//                        selected.setCongreso(null);
-//                        selected.setLibro(null);
-//                    }
-//
-//                    ArrayList<Archivo> CollArchivo = new ArrayList<>();
-//                    int numArchivos = ejbFacade.getIdArchivo();
-//
-//                    Archivo archCartaAprob = new Archivo();
-//                    archCartaAprob.setDocIdentificador(selected);
-//                    archCartaAprob.setArcId(numArchivos);
-//                    archCartaAprob.setArctipoPDFcargar("cartaAprobacion");
-//                    CollArchivo.add(archCartaAprob);
-//
-//                    //int numArchivos = numPubRevis;
-//                    if (!ArchivoPDF.getFileName().equalsIgnoreCase("")) {
-//                        Archivo archArt = new Archivo();
-//                        numArchivos = numArchivos + 1;
-//                        archArt.setDocIdentificador(selected);
-//                        archArt.setArcId(numArchivos);
-//                        archArt.setArctipoPDFcargar("tipoPublicacion");
-//                        CollArchivo.add(archArt);
-//                    }
-//                    if (!TablaContenidoPDF.getFileName().equalsIgnoreCase("")) {
-//                        Archivo arcTablaC = new Archivo();
-//                        numArchivos = numArchivos + 1;
-//                        arcTablaC.setDocIdentificador(selected);
-//                        arcTablaC.setArcId(numArchivos);
-//                        arcTablaC.setArctipoPDFcargar("tablaContenido");
-//                        CollArchivo.add(arcTablaC);
-//                    }
-//                    selected.setArchivoList(CollArchivo);
-////                    selected.agregarMetadatos(ArchivoPDF, TablaContenidoPDF, cartaAprobacionPDF);
-//                    utilDoc.agregarMetadatos(ArchivoPDF, TablaContenidoPDF, cartaAprobacionPDF, selected);
-//
-//                    selected.setDocEstado("Activo");
-//                    /* Asigna espera como estado del visado la publicacion */
-//                    selected.setDocVisado("espera");
-//                    ejbFacade.create(selected);
-//                    ejbFacade.flush();
-////                    mensajeconfirmarRegistro();
-//
-//                    Date date = new Date();
-//                    DateFormat datehourFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//                    String estampaTiempo = "" + datehourFormat.format(date);
-//                    Utilidades.enviarCorreo("posgradoselectunic@gmail.com", "Mensaje Sistema Doctorados - Registro Publicación", "Estudiante " + nombreAut + " ha regitrado una publicación del tipo " + selected.getIdTipoDocumentacion().getNombre() + " en la siguiente f y hora: " + estampaTiempo);
-////                    limpiarCampos();
-////                    redirigirAlistar(est.getEstUsuario());
-//                    // redirigirAlistar(est.getEstUsuario());
-//                } catch (IOException | GeneralSecurityException | DocumentException | PathNotFoundException | AccessDeniedException | EJBException ex) {
-////                    mensajeRegistroFallido();
-////                    limpiarCampos();
-////                    redirigirAlistar(est.getEstUsuario());
-//                    //    redirigirAlistar(est.getEstUsuario());
-//                    Logger.getLogger(DocumentacionController.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//
-//            }
-//        }
-//        return VistasEstudiante.verPublicaciones();
-//
-//    }
-
+    //</editor-fold>  
 }

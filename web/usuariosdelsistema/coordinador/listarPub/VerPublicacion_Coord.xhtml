@@ -42,20 +42,17 @@
                         </h:panelGrid>
                         <h:panelGrid columns="3" cellspacing="5">
                             <h:outputLabel value="Cambiar estado visado:" style="font-weight:bold;"/>
-                            <p:selectOneMenu id="console" value="#{documentacionController.visado}" style="width:125px">                        
-                                <f:selectItem itemLabel="Seleccione" itemValue="" />
-                                <f:selectItem itemLabel="En espera" itemValue="espera" />
-                                <f:selectItem itemLabel="Aprobado" itemValue="aprobado" />
-                                <f:selectItem itemLabel="No Aprobado" itemValue="no aprobado" />
+                            <p:selectOneMenu id="console" value="#{documentacionController.selected.docVisado}" style="width:125px">                        
+                                <f:selectItems value="#{documentacionController.tiposVisado}" />
                             </p:selectOneMenu>
                             <p:commandButton value="Aceptar" update="valEstadoVis" onclick="PF('dlg2').show();"/>                                    
 
                             <p:dialog header="Enviar Observaciones" widgetVar="dlg2" modal="true" height="150">                                                
                                 <h:inputTextarea id="obs" rows = "7" cols = "80">
-                                    <f:ajax listener="#{documentacionController.recibirTexto}" execute="obs" event="blur" ></f:ajax>                                                    
+                                    <f:ajax listener="#{documentacionController.actualizarVisado}" execute="obs" event="blur" ></f:ajax>                                                    
                                 </h:inputTextarea>         
                                 <br/>
-                                <p:commandButton value="Enviar" actionListener="#{documentacionController.cambiarEstadoVisado}" update="valEstadoVis" onclick="PF('dlg2').hide()"/>
+                                <p:commandButton value="Aceptar" update="valEstadoVis" onclick="PF('dlg2').hide()"/>
                             </p:dialog>              
                         </h:panelGrid>
 
@@ -101,15 +98,15 @@
                                 <h:outputText class="form-control" id="valTCapLibro"  value="#{documentacionController.selected.capituloLibro.caplibTituloCapitulo}" styleClass="addEspacio form-control"/>
                             </h:panelGrid>            
 
-                            <h:panelGrid columns="2" cellpadding="5" styleClass="elementosCentrados bajarGrid" id="panelRegistrar"  >
+                            <h:panelGrid columns="2" cellpadding="10" styleClass="elementosCentrados bajarGrid" id="panelRegistrar"  >
                                 <p:outputLabel value="Evidencia Publicación:&nbsp;&nbsp;" style="font-weight:bold;"/>
-                                <p:commandButton style="margin-right: 100px ;" value="Ver " action="#{documentacionController.pdfCartaAprob()}" class="btn btn-success" onclick="this.form.target = '_blank'"  ></p:commandButton>
+                                <h:commandButton style="margin-right: 100px ;" value="Ver " action="#{documentacionController.pdfCartaAprob()}" class="btn btn-success" onclick="this.form.target = '_blank'"  ></h:commandButton>
 
-                                <p:outputLabel value="Publicación:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" style="font-weight:bold;"/>
-                                <p:commandButton style="margin-right: 100px;"  value="Ver"   actionListener="#{documentacionController.pdfPub()}" class="btn btn-success"  onclick="this.form.target = '_blank'"  onblur="this.form.target = '_self'" ></p:commandButton>
+                                <p:outputLabel value="Publicación:" style="font-weight:bold;"/>
+                                <h:commandButton style="margin-right: 100px;"  value="Ver"   action="#{documentacionController.pdfPub()}" class="btn btn-success"  onclick="this.form.target = '_blank'"  onblur="this.form.target = '_self'" />
 
                                 <p:outputLabel value="Tabla de Contenido:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" style="font-weight:bold;"/>
-                                <p:commandButton style="margin-right:  100px; font-size: 13px; " value="Ver "  actionListener="#{documentacionController.pdfPubTC()}" class="btn btn-success"  onclick="this.form.target = '_blank'"  onblur="this.form.target = '_self'" ></p:commandButton>
+                                <h:commandButton style="margin-right:  100px; font-size: 13px; " value="Ver "  action="#{documentacionController.pdfPubTC()}" class="btn btn-success"  onclick="this.form.target = '_blank'"  onblur="this.form.target = '_self'" />
                             </h:panelGrid>
                         </p:panel>
                     </p:panel>

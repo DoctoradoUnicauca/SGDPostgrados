@@ -1,7 +1,7 @@
 package co.unicauca.proyectobase.controladores;
 
 import co.unicauca.proyectobase.controladores.util.Utilidades;
-import co.unicauca.proyectobase.controladores.util.utilDocumentacion;
+import co.unicauca.proyectobase.controladores.util.UtilDocumentacion;
 import co.unicauca.proyectobase.entidades.Estudiante;
 import co.unicauca.proyectobase.entidades.Documentacion;
 import co.unicauca.proyectobase.facades.DocumentacionFacade;
@@ -180,7 +180,7 @@ public class ReportesController implements Serializable {
 
                         tipoCategoria = "Sin categoria";
                         table.addCell(listaDocumentaciones.get(j).getEstId().getUsuId().getNombres());
-                        table.addCell(utilDocumentacion.obtenerNombreDoc(listaDocumentaciones.get(j)));
+                        table.addCell(UtilDocumentacion.obtenerNombreDoc(listaDocumentaciones.get(j)));
                         if (i == 0) {
                             tipoCategoria = listaDocumentaciones.get(j).getRevista().getRevCategoria();
                             publicadoEn = listaDocumentaciones.get(j).getRevista().getRevNombreRevista();
@@ -322,7 +322,7 @@ public class ReportesController implements Serializable {
                         tipoCategoria = "Sin categoria";
 
                         table.addCell(listaDocumentaciones.get(j).getEstId().getUsuId().getNombres());
-                        table.addCell(utilDocumentacion.obtenerNombreDoc(listaDocumentaciones.get(j)));
+                        table.addCell(UtilDocumentacion.obtenerNombreDoc(listaDocumentaciones.get(j)));
                         if (i == 0) {
                             tipoCategoria = listaDocumentaciones.get(j).getRevista().getRevCategoria();
                             publicadoEn = listaDocumentaciones.get(j).getRevista().getRevNombreRevista();
@@ -385,9 +385,6 @@ public class ReportesController implements Serializable {
         if (tipoTiempo.equals("inicioEstudios")) {
             publicaciones = daoDocumentacion.listadoDocumentacionEst(idEstudiante);
         }
-        for (Documentacion publicacione : publicaciones) {
-            System.out.println("doc:" + utilDocumentacion.obtenerNombreDoc(publicacione));
-        }
         return publicaciones;
     }
 
@@ -412,7 +409,7 @@ public class ReportesController implements Serializable {
                     Integer.parseInt(semestre));
         }
         for (Documentacion publicacione : listaDocumentaciones) {
-            System.out.println("doc:" + utilDocumentacion.obtenerNombreDoc(publicacione));
+            System.out.println("doc:" + UtilDocumentacion.obtenerNombreDoc(publicacione));
         }
     }
 

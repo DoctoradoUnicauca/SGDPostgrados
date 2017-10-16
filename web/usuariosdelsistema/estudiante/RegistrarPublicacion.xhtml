@@ -31,6 +31,7 @@
                                 <p:inputText placeholder="nombres apellidos" id="txt_title" value="#{documentacionController.autorSecundario}">
                                     <f:validator validatorId="validadorAutoresSecundarios" />
                                     <p:ajax event="blur" update="msgAutores" /> 
+                                    <p:keyFilter regEx="/[A-Za-z ]/i" />
                                 </p:inputText>
                                 <p:commandButton id="btn_add" value="Agregar" update="form books @parent" action="#{documentacionController.reinit()}" >
                                     <p:collector value="#{documentacionController.autorSecundario}" addTo="#{documentacionController.autoresSecundarios}" unique="true"/>

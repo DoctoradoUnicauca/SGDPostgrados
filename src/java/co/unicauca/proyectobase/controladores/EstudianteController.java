@@ -259,14 +259,7 @@ public class EstudianteController implements Serializable {
     }
 
     public int[] getListaAnios() {
-        Calendar cal = Calendar.getInstance();
-        int anioInicio = 1999;
-        int anioActual = cal.get(Calendar.YEAR);
-        int[] vectorA = new int[anioActual - anioInicio];
-        for (int i = 0; i < vectorA.length; i++) {
-            vectorA[i] = anioActual--;
-        }
-        return vectorA;
+        return Utilidades.getListaAnios();
     }
 
 }
