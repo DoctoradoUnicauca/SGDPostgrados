@@ -1,7 +1,9 @@
 package co.unicauca.proyectobase.controladores;
 
 import co.unicauca.proyectobase.controladores.util.Utilidades;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.sql.Connection;
@@ -19,16 +21,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
  * @author debian
- * 
+ *
  */
 @Named(value = "reportesJasperController")
 @ManagedBean
@@ -194,6 +200,7 @@ public class ReportesJasperController implements Serializable {
                     pdf();
                     break;
                 case TIPO_DOC_EXCEL:
+                    exportXls();
                     break;
             }
 //            conn.close();
@@ -212,6 +219,39 @@ public class ReportesJasperController implements Serializable {
             JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
             FacesContext.getCurrentInstance().responseComplete();
         } catch (JRException | IOException ex) {
+            Logger.getLogger(ReportesJasperController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    //exporta a xls
+
+    private void exportXls() {
+        try {
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+
+            OutputStream out = response.getOutputStream();
+
+            ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+            JRXlsExporter exporterXLS = new JRXlsExporter();
+
+            exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+            exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, arrayOutputStream);
+            exporterXLS.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+            exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+            exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+            exporterXLS.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+            exporterXLS.exportReport();
+
+            response.setHeader("Content-disposition", "attachment; filename=ListadoPDF");
+            response.setContentType("application/vnd.ms-excel");
+            response.setContentLength(arrayOutputStream.toByteArray().length);
+            out.write(arrayOutputStream.toByteArray());
+            out.flush();
+            out.close();
+
+        } catch (JRException e) {
+            JOptionPane.showMessageDialog(null, e);
+        } catch (IOException ex) {
             Logger.getLogger(ReportesJasperController.class.getName()).log(Level.SEVERE, null, ex);
         }
 

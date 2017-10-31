@@ -60,9 +60,6 @@ ORDER BY
 				</textField>
 			</band>
 		</groupHeader>
-		<groupFooter>
-			<band/>
-		</groupFooter>
 	</group>
 	<group name="grupo_id_estudiante">
 		<groupExpression><![CDATA[$F{estudiante_est_id}]]></groupExpression>
@@ -83,30 +80,48 @@ ORDER BY
 			</band>
 		</groupHeader>
 	</group>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<title>
 		<band height="102" splitType="Stretch">
 			<frame>
 				<reportElement style="Heading 4" mode="Opaque" x="0" y="0" width="555" height="102" backcolor="#006699" uuid="5e917349-198d-4344-a191-7f732be062c2"/>
 				<staticText>
-					<reportElement x="20" y="20" width="285" height="43" forecolor="#FFFFFF" uuid="66790422-029d-4d8e-bb67-60855dbcd720"/>
+					<reportElement x="20" y="20" width="413" height="43" forecolor="#FFFFFF" uuid="66790422-029d-4d8e-bb67-60855dbcd720"/>
 					<textElement>
 						<font size="28" isBold="true"/>
 					</textElement>
-					<text><![CDATA[REPORTE GLOBAL]]></text>
+					<text><![CDATA[REPORTE ESTUDIANTE]]></text>
 				</staticText>
-				<image>
-					<reportElement x="470" y="6" width="77" height="89" uuid="a3e78dfd-4989-4959-bbf2-63a6bfe69def"/>
-					<imageExpression><![CDATA["/home/debian/Documentos/proyecto2/SGDPosgrados/ProyectoII_reforma_DB/web/resources/images/logo_doctorado.png"]]></imageExpression>
-				</image>
+				<staticText>
+					<reportElement x="22" y="74" width="49" height="20" forecolor="#FFFFFF" uuid="68cee8fe-604f-45cd-8403-1bbf16aa2c8f"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Codigo: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="71" y="74" width="100" height="20" forecolor="#FFFFFF" uuid="8521aa64-9a77-4b8e-9274-f6e940ccda8f"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{codEst}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="265" y="74" width="33" height="20" forecolor="#FFFFFF" uuid="9fd20888-65e3-4b34-aa01-be71b6cf9e08"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Año:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="300" y="74" width="100" height="20" forecolor="#FFFFFF" uuid="7dd2abf5-0292-45ef-b22e-3c5695b1c505"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
@@ -117,14 +132,14 @@ ORDER BY
 				<text><![CDATA[Total creditos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="197" y="0" width="178" height="20" backcolor="#CCCCFF" uuid="0a128139-fb83-4555-adc6-39b1a3837b0f"/>
+				<reportElement mode="Opaque" x="197" y="0" width="206" height="20" backcolor="#CCCCFF" uuid="0a128139-fb83-4555-adc6-39b1a3837b0f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total doumentos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="170" height="20" backcolor="#CCCCFF" uuid="4fc51dfb-602a-4e26-8030-05a04e4c14e7"/>
+				<reportElement mode="Opaque" x="0" y="0" width="197" height="20" backcolor="#CCCCFF" uuid="4fc51dfb-602a-4e26-8030-05a04e4c14e7"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -139,9 +154,6 @@ ORDER BY
 			</line>
 		</band>
 	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="20" splitType="Stretch">
 			<textField>
@@ -167,7 +179,4 @@ ORDER BY
 			</textField>
 		</band>
 	</pageFooter>
-	<summary>
-		<band splitType="Stretch"/>
-	</summary>
 </jasperReport>

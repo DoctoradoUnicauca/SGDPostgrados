@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.Map;
-import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -37,9 +36,9 @@ public class sesionController implements Serializable {
     private String username;
     private String password;
     private boolean logeado;
-//    @EJB
     protected Usuario usuario;
 
+//    @EJB
     @Inject
     private UsuarioFacade ejbFacade;
 
@@ -78,7 +77,6 @@ public class sesionController implements Serializable {
     public void sinAcceso() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage("Error", "Usuario y/o contraseña incorrecto(s)"));
-
     }
 
     public void login() throws ServletException {
@@ -98,7 +96,6 @@ public class sesionController implements Serializable {
                 context.addMessage(null, msg);
                 return;
             }
-
             Principal principal = req.getUserPrincipal();
             usuario = ejbFacade.buscarPorNombreUsuario(principal.getName());
             ExternalContext external = FacesContext.getCurrentInstance().getExternalContext();

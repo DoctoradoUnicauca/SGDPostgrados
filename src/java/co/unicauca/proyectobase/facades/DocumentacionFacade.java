@@ -6,7 +6,6 @@
 package co.unicauca.proyectobase.facades;
 
 import co.unicauca.proyectobase.entidades.Documentacion;
-import co.unicauca.proyectobase.entidades.Usuario;
 import java.math.BigInteger;
 import java.util.List;
 import javax.ejb.Stateless;

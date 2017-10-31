@@ -46,12 +46,6 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "nombre_usuario", nullable = false, length = 45)
-    private String nombreUsuario;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -82,6 +76,11 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "usu_id", nullable = false)
     private Integer usuId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "nombre_usuario", nullable = false, length = 45)
+    private String nombreUsuario;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuId")
     private Estudiante estudiante;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
@@ -96,13 +95,14 @@ public class Usuario implements Serializable {
         this.usuId = usuId;
     }
 
-    public Usuario(Integer usuId, String nombres, String apellidos, String correo, String contrasena, String estado) {
+    public Usuario(Integer usuId, String nombres, String apellidos, String correo, String contrasena, String estado, String nombreUsuario) {
         this.usuId = usuId;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
         this.contrasena = contrasena;
         this.estado = estado;
+        this.nombreUsuario = nombreUsuario;
     }
 
     public String getNombres() {
@@ -153,6 +153,14 @@ public class Usuario implements Serializable {
         this.usuId = usuId;
     }
 
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
     public Estudiante getEstudiante() {
         return estudiante;
     }
@@ -200,14 +208,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Usuario[ usuId=" + usuId + " ]";
+        return "com.unicauca.entidades.Usuario[ usuId=" + usuId + " ]";
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
     }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-}

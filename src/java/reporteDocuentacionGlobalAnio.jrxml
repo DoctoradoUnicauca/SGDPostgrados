@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8c2aeef0-cc31-4143-969d-2554d0ac9f4d">
 	<property name="ireport.zoom" value="1.3310000000000004"/>
-	<property name="ireport.x" value="8"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Serif" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Serif" fontSize="18"/>
@@ -54,9 +54,6 @@ ORDER BY
 				</textField>
 			</band>
 		</groupHeader>
-		<groupFooter>
-			<band/>
-		</groupFooter>
 	</group>
 	<group name="grupo_id_estudiante">
 		<groupExpression><![CDATA[$F{estudiante_est_id}]]></groupExpression>
@@ -77,13 +74,10 @@ ORDER BY
 			</band>
 		</groupHeader>
 	</group>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<title>
 		<band height="102" splitType="Stretch">
 			<frame>
-				<reportElement style="Heading 4" mode="Opaque" x="0" y="0" width="555" height="102" backcolor="#006699" uuid="5e917349-198d-4344-a191-7f732be062c2"/>
+				<reportElement style="Heading 4" mode="Opaque" x="0" y="0" width="555" height="102" backcolor="#000033" uuid="5e917349-198d-4344-a191-7f732be062c2"/>
 				<staticText>
 					<reportElement x="20" y="20" width="285" height="43" forecolor="#FFFFFF" uuid="66790422-029d-4d8e-bb67-60855dbcd720"/>
 					<textElement>
@@ -92,35 +86,49 @@ ORDER BY
 					<text><![CDATA[REPORTE GLOBAL]]></text>
 				</staticText>
 				<image>
-					<reportElement x="470" y="6" width="77" height="89" uuid="a3e78dfd-4989-4959-bbf2-63a6bfe69def"/>
-					<imageExpression><![CDATA["/home/debian/Documentos/proyecto2/SGDPosgrados/ProyectoII_reforma_DB/web/resources/images/logo_doctorado.png"]]></imageExpression>
+					<reportElement x="471" y="6" width="77" height="89" uuid="ea91b709-8cad-4e22-bc1d-fca49aaa29f4"/>
+					<imageExpression><![CDATA["/home/debian/Documentos/SemestreII2017/proyecto2/SGDPosgrados/ProyectoII_reforma_DB/web/resources/images/logo_doctorado.png"]]></imageExpression>
 				</image>
+				<staticText>
+					<reportElement x="23" y="75" width="33" height="20" forecolor="#FFFFFF" uuid="01da13ac-b392-4f5c-9db9-4bec3d8777ca"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[Año:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="61" y="75" width="100" height="20" forecolor="#FFFFFF" uuid="8b674ad8-582a-4fb6-9771-2453eb67d569"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement mode="Opaque" x="403" y="0" width="150" height="20" backcolor="#CCCCFF" uuid="9bc57958-1107-435d-82df-ee8676fd0233"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
+					<paragraph leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[Total creditos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="197" y="0" width="178" height="20" backcolor="#CCCCFF" uuid="0a128139-fb83-4555-adc6-39b1a3837b0f"/>
+				<reportElement mode="Opaque" x="197" y="0" width="206" height="20" backcolor="#CCCCFF" uuid="0a128139-fb83-4555-adc6-39b1a3837b0f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
+					<paragraph leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[Total doumentos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="150" height="20" backcolor="#CCCCFF" uuid="4fc51dfb-602a-4e26-8030-05a04e4c14e7"/>
+				<reportElement mode="Opaque" x="0" y="0" width="197" height="20" backcolor="#CCCCFF" uuid="4fc51dfb-602a-4e26-8030-05a04e4c14e7"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
+					<paragraph leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[Estudiante]]></text>
 			</staticText>
@@ -133,9 +141,6 @@ ORDER BY
 			</line>
 		</band>
 	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="20" splitType="Stretch">
 			<textField>
@@ -161,7 +166,4 @@ ORDER BY
 			</textField>
 		</band>
 	</pageFooter>
-	<summary>
-		<band splitType="Stretch"/>
-	</summary>
 </jasperReport>

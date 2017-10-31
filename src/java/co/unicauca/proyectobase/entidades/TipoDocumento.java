@@ -133,7 +133,7 @@ public class TipoDocumento implements Serializable {
 
     @Override
     public String toString() {
-        return "co.unicauca.proyectobase.entidades.TipoDocumento[ identificador=" + identificador + " ]";
+        return "com.unicauca.entidades.TipoDocumento[ identificador=" + identificador + " ]";
     }
     
 }

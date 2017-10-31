@@ -8,15 +8,6 @@
 	<style name="Column header" forecolor="#666666" fontName="Serif" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Serif" fontSize="12"/>
 	<style name="Heading 4" fontSize="12" isBold="true" isItalic="true"/>
-	<parameter name="anio" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[2017]]></defaultValueExpression>
-	</parameter>
-	<parameter name="codEst" class="java.lang.String">
-		<defaultValueExpression><![CDATA["70_1234567890"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="semestre" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[2]]></defaultValueExpression>
-	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      usuario.`nombres` AS usuario_nombres,
@@ -29,10 +20,7 @@ FROM
      `estudiante` estudiante INNER JOIN `documentacion` documentacion ON estudiante.`est_id` = documentacion.`est_id`
      INNER JOIN `usuario` usuario ON estudiante.`usu_id` = usuario.`usu_id`
      INNER JOIN `tipo_documento` tipo_documento ON documentacion.`id_tipo_documentacion` = tipo_documento.`identificador`
-WHERE
-     YEAR(documentacion.`doc_fecha_registro`) = $P{anio}
-     AND estudiante.`est_codigo` = $P{codEst} AND
-     MONTH(documentacion.`doc_fecha_registro`) BETWEEN  6*($P{semestre}-1)+1 AND 6*($P{semestre})
+
 ORDER BY
      tipo_documento_nombre ASC]]>
 	</queryString>
@@ -70,15 +58,15 @@ ORDER BY
 		<groupHeader>
 			<band height="24">
 				<textField>
-					<reportElement x="0" y="0" width="170" height="20" uuid="cb246c68-a6cc-48e4-8216-2c8571eca2ea"/>
+					<reportElement x="5" y="0" width="170" height="20" uuid="cb246c68-a6cc-48e4-8216-2c8571eca2ea"/>
 					<textFieldExpression><![CDATA[$F{usuario_nombres}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="grupo_id_estudiante">
-					<reportElement x="197" y="0" width="178" height="20" uuid="c6e1dfb5-1c8d-4144-aea1-319ae52bc8d0"/>
+					<reportElement x="202" y="0" width="178" height="20" uuid="c6e1dfb5-1c8d-4144-aea1-319ae52bc8d0"/>
 					<textFieldExpression><![CDATA[$V{documentacion_doc_creditos_1}]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Group" evaluationGroup="grupo_id_estudiante">
-					<reportElement x="403" y="0" width="100" height="20" uuid="467b4a9b-c1e5-44a9-b2f0-27830d452e04"/>
+					<reportElement x="408" y="0" width="100" height="20" uuid="467b4a9b-c1e5-44a9-b2f0-27830d452e04"/>
 					<textFieldExpression><![CDATA[$V{documentacion_doc_creditos_2}]]></textFieldExpression>
 				</textField>
 			</band>
@@ -89,54 +77,12 @@ ORDER BY
 			<frame>
 				<reportElement style="Heading 4" mode="Opaque" x="0" y="0" width="555" height="102" backcolor="#006699" uuid="5e917349-198d-4344-a191-7f732be062c2"/>
 				<staticText>
-					<reportElement x="20" y="20" width="440" height="43" forecolor="#FFFFFF" uuid="66790422-029d-4d8e-bb67-60855dbcd720"/>
+					<reportElement x="20" y="20" width="285" height="43" forecolor="#FFFFFF" uuid="66790422-029d-4d8e-bb67-60855dbcd720"/>
 					<textElement>
 						<font size="28" isBold="true"/>
 					</textElement>
-					<text><![CDATA[REPORTE ESTUDIANTE]]></text>
+					<text><![CDATA[REPORTE GLOBAL]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="21" y="76" width="54" height="20" forecolor="#FFFFFF" uuid="4d4d3690-10c8-4df7-bf34-979d0ce6ebb6"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-					<text><![CDATA[Codigo: ]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="75" y="76" width="100" height="20" forecolor="#FFFFFF" uuid="4ee5fa79-1591-4a81-a370-1f2bcd553963"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{codEst}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="349" y="76" width="67" height="20" forecolor="#FFFFFF" uuid="5383e38f-39ca-463a-8c18-5b30b5380eff"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-					<text><![CDATA[Semestre: ]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="416" y="76" width="97" height="20" forecolor="#FFFFFF" uuid="416bb942-2074-477d-af5e-099388dd40f3"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{semestre}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="196" y="76" width="33" height="20" forecolor="#FFFFFF" uuid="3a360cf9-233a-4a4f-8bce-2be277ceacfb"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-					<text><![CDATA[Año:]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="232" y="76" width="100" height="20" forecolor="#FFFFFF" uuid="245cd86b-bb5b-4d10-a61a-715811b1d035"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
-				</textField>
 			</frame>
 		</band>
 	</title>
@@ -147,22 +93,28 @@ ORDER BY
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total creditos]]></text>
+				<text><![CDATA[  Total creditos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="197" y="0" width="206" height="20" backcolor="#CCCCFF" uuid="0a128139-fb83-4555-adc6-39b1a3837b0f"/>
+				<reportElement mode="Opaque" x="197" y="0" width="205" height="20" backcolor="#CCCCFF" uuid="0a128139-fb83-4555-adc6-39b1a3837b0f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total doumentos]]></text>
+				<text><![CDATA[  Total doumentos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="197" height="20" backcolor="#CCCCFF" uuid="4fc51dfb-602a-4e26-8030-05a04e4c14e7"/>
+				<reportElement mode="Opaque" x="0" y="0" width="196" height="20" backcolor="#CCCCFF" uuid="4fc51dfb-602a-4e26-8030-05a04e4c14e7"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Estudiante]]></text>
+				<text><![CDATA[  Estudiante]]></text>
 			</staticText>
+			<line>
+				<reportElement x="196" y="0" width="1" height="20" uuid="0a3bb279-cc27-4feb-9eb7-63a5efa8ae16"/>
+			</line>
+			<line>
+				<reportElement x="402" y="0" width="1" height="20" uuid="93d021f2-618d-45dc-97d6-13e93a0c2b09"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>

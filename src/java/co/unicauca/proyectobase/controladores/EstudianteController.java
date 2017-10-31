@@ -77,6 +77,7 @@ public class EstudianteController implements Serializable {
         usu.setApellidos("potter");
         usu.setContrasena("asda");
         usu.setCorreo("harry@gmail.es");
+        usu.setNombreUsuario("harry");
         usu.setEstado(Utilidades.ESTADO_ACTIVO);
 
         selected.setUsuId(usu);
@@ -89,6 +90,7 @@ public class EstudianteController implements Serializable {
         Usuario usu = selected.getUsuId();
         usu.setContrasena(Utilidades.sha256(selected.getEstCodigo()));
         usu.setEstado(Utilidades.ESTADO_ACTIVO);
+        usu.setNombreUsuario(usu.getCorreo().split("@")[0]);
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/BundleEstudiantes").getString("EstudianteCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -96,6 +98,7 @@ public class EstudianteController implements Serializable {
         // actualizar usuario
         usu = ejbUsuarioFacade.buscarPorCorreo(usu.getCorreo());
         // asignar tipo a usuario
+        System.out.println("usuario: " + usu);
         GrupoTipoUsuario gtu = new GrupoTipoUsuario();
         gtu.setUsuId(usu.getUsuId());
         gtu.setNombreUsuario(usu.getCorreo().split("@")[0]);
@@ -107,10 +110,16 @@ public class EstudianteController implements Serializable {
     }
 
     public String update() {
-        ejbUsuarioFacade.edit(selected.getUsuId());
-        selected.getUsuId().getGrupoTipoUsuario().setNombreUsuario(selected.getUsuId().getCorreo().split("@")[0]);
-        System.out.println("tipo:-- " + selected.getUsuId().getGrupoTipoUsuario().getIdTipo());
-        ejbGrupoTipoUsuarioFacade.edit(selected.getUsuId().getGrupoTipoUsuario());
+        
+        Usuario usu = selected.getUsuId();
+        String nomUsu = usu.getCorreo().split("@")[0];
+        usu.setNombreUsuario(nomUsu);
+        ejbUsuarioFacade.edit(usu);
+        ejbFacade.edit(selected);
+        
+        GrupoTipoUsuario gtu = usu.getGrupoTipoUsuario();
+        gtu.setNombreUsuario(nomUsu);
+        ejbGrupoTipoUsuarioFacade.edit(usu.getGrupoTipoUsuario());
 
         Utilidades.enviarCorreoEdicion(selected);
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/BundleEstudiantes").getString("EstudianteUpdated"));

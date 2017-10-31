@@ -6,7 +6,7 @@
 package co.unicauca.proyectobase.entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,10 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class TipoUsuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "descripcion", nullable = false, length = 100)
+    @Size(max = 100)
+    @Column(name = "descripcion", length = 100)
     private String descripcion;
     @Id
     @Basic(optional = false)
@@ -47,7 +45,7 @@ public class TipoUsuario implements Serializable {
     @Column(name = "id_tipo", nullable = false, length = 30)
     private String idTipo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipo")
-    private Collection<GrupoTipoUsuario> grupoTipoUsuarioCollection;
+    private List<GrupoTipoUsuario> grupoTipoUsuarioList;
 
     public TipoUsuario() {
     }
@@ -78,12 +76,12 @@ public class TipoUsuario implements Serializable {
     }
 
     @XmlTransient
-    public Collection<GrupoTipoUsuario> getGrupoTipoUsuarioCollection() {
-        return grupoTipoUsuarioCollection;
+    public List<GrupoTipoUsuario> getGrupoTipoUsuarioList() {
+        return grupoTipoUsuarioList;
     }
 
-    public void setGrupoTipoUsuarioCollection(Collection<GrupoTipoUsuario> grupoTipoUsuarioCollection) {
-        this.grupoTipoUsuarioCollection = grupoTipoUsuarioCollection;
+    public void setGrupoTipoUsuarioList(List<GrupoTipoUsuario> grupoTipoUsuarioList) {
+        this.grupoTipoUsuarioList = grupoTipoUsuarioList;
     }
 
     @Override
@@ -108,7 +106,7 @@ public class TipoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "co.unicauca.proyectobase.entidades.TipoUsuario[ idTipo=" + idTipo + " ]";
+        return "com.unicauca.entidades.TipoUsuario[ idTipo=" + idTipo + " ]";
     }
     
 }
